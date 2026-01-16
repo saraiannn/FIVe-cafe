@@ -1,18 +1,20 @@
-package it.fiv.FIVecafe.entity;
+package it.fiv.FIVecafe.entity;  //this class belongs to the Entity layer
 
 public class Beverage {
-    private String name;
-    private double price;
+    String beverageName;
+    double beveragePrice;
 
-    public Beverage(String name, double price) {
-        this.name = name;
-        this.price = price;
+    public Beverage(String beverageName, double beveragePrice) {
+        this.beverageName = beverageName;
+        this.beveragePrice = beveragePrice;
     }
 
-    public String getName() {
-        return name;
+    //both beverageName and beveragePrice are read-only by other layers
+    public String getBeverageName() {
+        return beverageName;
     }
-    public double getPrice() {
-        return price;
+    public double getBeveragePrice() {
+        return beveragePrice;
     }
 }
+
