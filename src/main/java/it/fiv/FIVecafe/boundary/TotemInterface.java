@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class TotemInterface {
 
-    private OrderManager orderManager = new OrderManager();
+    private final OrderManager orderManager = new OrderManager();
 
     public void start(){
 
@@ -18,7 +18,7 @@ public class TotemInterface {
         System.out.println("Welcome to FIVe Cafè");
         System.out.println("=== MENU ===");
         System.out.println("1. Espresso   1.00");
-        System.out.println("2. Macchiato  1.10");;
+        System.out.println("2. Macchiato  1.10");
 
         int selection = scanner.nextInt();
         Beverage beverage; //user choice passed from boundary to control
