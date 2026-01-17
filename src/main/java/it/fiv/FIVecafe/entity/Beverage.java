@@ -1,7 +1,18 @@
-package it.fiv.FIVecafe.entity;  //this class belongs to the Entity layer
+package it.fiv.FIVecafe.entity;
 
-public interface Beverage {  //defines all Beverage objects methods without their implementation
-    String getBeverageName();
-    double getBeveragePrice();
+public class Beverage {
+    private String name;
+    private double price;
 
+    public Beverage(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public double getPrice() {
+        return price;
+    }
 }
