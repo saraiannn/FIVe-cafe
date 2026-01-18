@@ -8,7 +8,7 @@ import it.fiv.FIVecafe.entity.MilkDecorator;
 import java.util.Scanner;
 
 public class TotemInterface {
-    private OrderManager orderManager = new OrderManager();
+    private final OrderManager orderManager = new OrderManager();
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
@@ -30,7 +30,7 @@ public class TotemInterface {
                 break;
             default:
                 System.out.println("Wrong choice");
-
+                return;
         }
 
         System.out.println("Wanna add a decorator?");
