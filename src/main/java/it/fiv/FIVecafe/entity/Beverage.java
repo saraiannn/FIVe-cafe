@@ -1,18 +1,7 @@
 package it.fiv.FIVecafe.entity;
 
-public class Beverage {
-    private String name;
-    private double price;
+public interface Beverage { //defining all methods that each base object and decorator must meet
+     String getBeverageName();
+     double getBeveragePrice();
 
-    public Beverage(String name, double price) {
-        this.name = name;
-        this.price = price;
-    }
-
-    public String getName() {
-        return name;
-    }
-    public double getPrice() {
-        return price;
-    }
 }
