@@ -1,17 +1,17 @@
 package it.fiv.FIVecafe.entity;
 
-public class MilkDecorator extends BeverageDecorator {
+public class MilkDecorator extends BeverageDecorator {  //(concrete decorator) adds "milk" functionality
     public MilkDecorator(Beverage beverage) {
         super(beverage);
     }
 
     @Override
     public String getBeverageName() {
-        return beverage.getBeverageName() + "+ decorator";
+        return beverage.getBeverageName() + " + milk";
     }
 
     @Override
     public double getBeveragePrice() {
-        return beverage.getBeveragePrice() + 0.10;
+        return beverage.getBeveragePrice() + 0.30;
     }
 }

@@ -1,6 +1,6 @@
 package it.fiv.FIVecafe.entity;
 
-public class BasicBeverage implements Beverage {//basic beverage without extras that implements the Component
+public class BasicBeverage implements Beverage {  //(concrete component) basic beverage without extras that implements the Component
     private final String beverageName;
     private final double beveragePrice;
 
@@ -10,12 +10,12 @@ public class BasicBeverage implements Beverage {//basic beverage without extras 
     }
 
     @Override
-    public String getBeverageName() {
+    public String getBeverageName() {  //implements Beverage interface getBeverageName() method
         return beverageName;
     }
 
     @Override
-    public double getBeveragePrice() {
+    public double getBeveragePrice() {  //implements Beverage interface getBeveragePrice() method
         return beveragePrice;
     }
 
