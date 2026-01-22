@@ -1,28 +1,40 @@
 package it.fiv.FIVecafe.control;
 
-import it.fiv.FIVecafe.entity.Beverage;
 import it.fiv.FIVecafe.entity.Order;
+import it.fiv.FIVecafe.entity.OrderStatus;
+import it.fiv.FIVecafe.observer.OrderObserver;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
+public class OrderManager {  //subject
 
-public class OrderManager {
-    private final List<Order> orders = new ArrayList<>();
+    private List<OrderObserver> observers = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
+    private int nextOrderNumber = 1;
 
-    public void createOrder(Order order) {
-        orders.add(order);
+    public void addObserver(OrderObserver observer){
+        observers.add(observer);
+    }
 
-        System.out.println("*** ORDER SUMMARY ***");
-        for(Beverage b: order.getBeverages()) {
-        System.out.printf("%s : %.2f €%n", b.getBeverageName(), b.getBeveragePrice());
+
+    public void notifyObservers(Order order){
+        for(OrderObserver observer : observers){
+            observer.update(order);
         }
-        System.out.printf("TOTAL: %.2f €%n", order.getTotalPrice());
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public Order startNewOrder(){
+        Order order = new Order(nextOrderNumber++);
+        orders.add(order);
+        notifyObservers(order);
+        return order;
     }
 
+
+    public void updateOrderStatus(Order order, OrderStatus status) {
+        order.setStatus(status);
+        notifyObservers(order);
+    }
 
 }

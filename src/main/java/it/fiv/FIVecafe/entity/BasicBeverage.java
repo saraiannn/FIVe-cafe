@@ -19,4 +19,16 @@ public class BasicBeverage implements Beverage {  //(concrete component) basic b
         return beveragePrice;
     }
 
+    public boolean supportsCocoa(){
+        return true;
+    }
+
+    public boolean supportsCaramel(){
+        return true;
+    }
+
+    public boolean hasMilkByDefault(){
+        return true;
+    }
+
 }

@@ -1,5 +1,6 @@
 package it.fiv.FIVecafe.boundary;
 
+import it.fiv.FIVecafe.control.Kitchen;
 import it.fiv.FIVecafe.control.OrderManager;
 import it.fiv.FIVecafe.entity.*;
 import it.fiv.FIVecafe.control.BeverageFactory;
@@ -9,9 +10,13 @@ import java.util.Scanner;
 
 public class TotemInterface {
     private final OrderManager orderManager = new OrderManager();
-    Order currentOrder = new Order();
+    private final OrderDisplay display = new OrderDisplay();
+    private final Kitchen kitchen = new Kitchen(orderManager);
+
 
     public void start() {
+
+        orderManager.addObserver(display);
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
 
@@ -43,12 +48,14 @@ public class TotemInterface {
         System.out.println("0.  Finish order/go to checkout");
 
         boolean running = true;
-        Beverage beverage = BeverageFactory.createBeverage(choice);
+
+        Order order = orderManager.startNewOrder();
 
         while(running) {
 
             System.out.println("Select your beverage:");
 
+            Beverage beverage = BeverageFactory.createBeverage(choice);
             choice = scanner.nextInt();
             scanner.nextLine();  //cleans buffer's scanner
             switch (choice) {
@@ -121,7 +128,8 @@ public class TotemInterface {
                 beverage = new CaramelDecorator(beverage);
             }
 
-            currentOrder.addBeverage(beverage);
+
+            order.addBeverage(beverage);
 
             System.out.println("Wanna add something else?");
 
@@ -131,7 +139,10 @@ public class TotemInterface {
             }
 
         }
-        orderManager.createOrder(currentOrder);
+        System.out.println("*** ORDER SUMMARY ***");
+        System.out.println(order.getSummary());
+
+        kitchen.prepareOrder(order);
         System.out.println("Thank you for choosing FIVe Cafè!");
     }
 
