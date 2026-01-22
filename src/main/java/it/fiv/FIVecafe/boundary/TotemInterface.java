@@ -1,6 +1,6 @@
 package it.fiv.FIVecafe.boundary;
 
-import it.fiv.FIVecafe.control.Kitchen;
+import it.fiv.FIVecafe.control.Barman;
 import it.fiv.FIVecafe.control.OrderManager;
 import it.fiv.FIVecafe.entity.*;
 import it.fiv.FIVecafe.control.BeverageFactory;
@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TotemInterface {
     private final OrderManager orderManager = new OrderManager();
     private final OrderDisplay display = new OrderDisplay();
-    private final Kitchen kitchen = new Kitchen(orderManager);
+    private final Barman barman = new Barman(orderManager);
 
 
     public void start() {
@@ -142,7 +142,7 @@ public class TotemInterface {
         System.out.println("*** ORDER SUMMARY ***");
         System.out.println(order.getSummary());
 
-        kitchen.prepareOrder(order);
+        barman.prepareOrder(order);
         System.out.println("Thank you for choosing FIVe Cafè!");
     }
 

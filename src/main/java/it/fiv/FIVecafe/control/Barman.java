@@ -3,11 +3,11 @@ package it.fiv.FIVecafe.control;
 import it.fiv.FIVecafe.entity.Order;
 import it.fiv.FIVecafe.entity.OrderStatus;
 
-public class Kitchen {
+public class Barman {
 
     private final OrderManager orderManager;
 
-    public Kitchen(OrderManager orderManager) {
+    public Barman(OrderManager orderManager) {
         this.orderManager = orderManager;
     }
 
