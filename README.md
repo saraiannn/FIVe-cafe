@@ -31,37 +31,6 @@ Design Patterns used:
 
 ---
 
-## Project structure
-src/main/it.fiv.FIVecafe
-├── boundary
-| ├── BarmanDisplayFX.java
-│ ├── MainFX.java
-│ ├── OrderDisplay.java
-│ └── TotemInterface.java
-│
-├── control
-│ ├── Barman.java
-│ ├── BeverageFactory.java 
-│ └── OrderManager.java
-│
-├── entity
-│ ├── BasicBeverage.java 
-│ ├── Beverage.java 
-│ ├── BeverageDecorator.java
-│ ├── CaramelDecorator.java
-| ├── CocoaDecorator.java
-| ├── MilkDecorator.java
-| ├── Order.java
-| ├── OrderStatus.java
-│ └── SugarDecorator.java
-│
-├── observer
-│ └── OrderObserver.java
-|
-├── Main.java
-
----
-
 ## Requirements
 
 Before running the project, make sure you have:
@@ -79,8 +48,10 @@ java -version
 
 ## How to run the project
 ### 1. Clone the repository
+```git
 git clone https://github.com/<username>/FIVe-cafe.git
 cd FIVe-cafe
+```
 
 ### 2. Import the project into IntelliJ
 - File -> Open
@@ -88,8 +59,8 @@ cd FIVe-cafe
 IntelliJ will automatically detect the Mavem configuration
 
 ### 3. Run the JavaFX application
-#### Do NOT use the IntelliJ 'Run' button
-Instead, open the integrated terminal (second icon in the left corner of the IDE) and run the following command:
+#### DO NOT use the IntelliJ 'Run' button
+Instead, open the integrated terminal (second icon in the left corner of the IDE window) and run the following command:
 ```bash
 mvn clean javafx:run 
 ```
