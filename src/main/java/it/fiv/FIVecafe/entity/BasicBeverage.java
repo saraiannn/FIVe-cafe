@@ -30,5 +30,4 @@ public class BasicBeverage implements Beverage {  //(concrete component) basic b
     public boolean hasMilkByDefault(){
         return true;
     }
-
 }

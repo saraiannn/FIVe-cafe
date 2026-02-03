@@ -15,3 +15,4 @@ public class SugarDecorator extends BeverageDecorator {
         return beverage.getBeveragePrice() + 0.10;
     }
 }
+

@@ -6,5 +6,4 @@ public abstract class BeverageDecorator implements Beverage {  //(abstract decor
     public BeverageDecorator(Beverage beverage) {
         this.beverage = beverage;
     }
-
 }

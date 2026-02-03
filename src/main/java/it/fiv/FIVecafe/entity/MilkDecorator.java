@@ -15,3 +15,4 @@ public class MilkDecorator extends BeverageDecorator {  //(concrete decorator) a
         return beverage.getBeveragePrice() + 0.30;
     }
 }
+

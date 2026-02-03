@@ -63,7 +63,4 @@ public class OrderManager {  //subject
         order.setStatus(OrderStatus.RECEIVED);
         notifyObservers(order);
     }
-
-
-
 }
