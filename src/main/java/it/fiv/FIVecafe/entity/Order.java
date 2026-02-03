@@ -6,7 +6,8 @@ import java.util.List;
 public class Order {
     private final int orderNumber;
     private final List<Beverage> beverages;
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.CREATED;
+
 
     public Order(int orderNumber) {
         this.orderNumber = orderNumber;

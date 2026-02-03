@@ -32,9 +32,38 @@ public class OrderManager {  //subject
     }
 
 
-    public void updateOrderStatus(Order order, OrderStatus status) {
-        order.setStatus(status);
+    public void updateOrderStatus(Order order, OrderStatus next) {
+        if (order == null || next == null) return;
+
+        OrderStatus current = order.getStatus();
+
+        if (current == next) return;
+
+        boolean allowed =
+                (current == OrderStatus.CREATED   && next == OrderStatus.RECEIVED) ||
+                        (current == OrderStatus.RECEIVED  && next == OrderStatus.PREPARING) ||
+                        (current == OrderStatus.PREPARING && next == OrderStatus.READY);
+
+
+        if (!allowed) {
+            return;
+        }
+
+        order.setStatus(next);
         notifyObservers(order);
     }
+
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void submitOrder(Order order) {
+        if (order == null) return;
+        order.setStatus(OrderStatus.RECEIVED);
+        notifyObservers(order);
+    }
+
+
 
 }
