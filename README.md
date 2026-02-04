@@ -87,3 +87,19 @@ The JavaFX GUI is the current version under development.
 
 ## Author
 Project developed for educational purposes as part of a university course.
+
+---
+
+## Guided System Usage (Simulation Walkthrough)
+The following steps describe the correct workflow to simulate the full system behavior, from order creation at the totem to order preparation at the bar display.
+1. Start a new order: launch the application and click the “Start Order” button to create a new customer order.
+
+2. Select a beverage category: from the left sidebar, choose one of the available beverage categories (e.g. Basic Coffee, Cold Coffee, Tea & Non Coffee).
+
+3. Select a beverage and optional extras: click on a beverage from the list on the right. A description of the selected beverage will be shown, and optional extras (such as milk, sugar, caramel, or cocoa) can be added. Confirm the selection by clicking “Add to cart”.
+
+4. Send the order to the bar: once the order is complete, click the “Send” button. The order is now submitted and appears in the Barman Display with status RECEIVED.
+
+5. Manage the order from the Barman Display: in the barman display window, the operator must first select an order from the list. Only after selecting it, the status buttons become effective: IN PREPARATION to indicate the order is being prepared, READY to indicate the order is completed.
+
+If no order is selected, status buttons will not perform any action.
