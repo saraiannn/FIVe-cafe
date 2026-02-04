@@ -92,6 +92,7 @@ Project developed for educational purposes as part of a university course.
 
 ## Guided System Usage (Simulation Walkthrough)
 The following steps describe the correct workflow to simulate the full system behavior, from order creation at the totem to order preparation at the bar display.
+
 **1. Start a new order:** launch the application and click the “Start Order” button to create a new customer order.
 
 **2. Select a beverage category:** from the left sidebar, choose one of the available beverage categories (e.g. Basic Coffee, Cold Coffee, Tea & Non Coffee).
