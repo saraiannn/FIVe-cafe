@@ -27,7 +27,7 @@ public class BarmanDisplayFX implements OrderObserver {
 
     public void show() {
         Stage stage = new Stage();
-        stage.setTitle("Kitchen Display - FIVe Cafè");
+        stage.setTitle("FIVe Cafè's Order Display");
 
         orderItems.setAll(orderManager.getOrders());
 
@@ -45,8 +45,12 @@ public class BarmanDisplayFX implements OrderObserver {
         });
 
         Button receivedBtn = new Button("RECEIVED");
-        Button prepBtn = new Button("IN PREPARATION");
+        Button prepBtn = new Button("PREPARING");
         Button readyBtn = new Button("READY");
+
+        receivedBtn.getStyleClass().add("secondary-btn");
+        prepBtn.getStyleClass().add("primary-btn");
+        readyBtn.getStyleClass().add("primary-btn");
 
         receivedBtn.setOnAction(e -> changeStatus(OrderStatus.RECEIVED));
         prepBtn.setOnAction(e -> changeStatus(OrderStatus.PREPARING));
@@ -59,7 +63,10 @@ public class BarmanDisplayFX implements OrderObserver {
         root.setCenter(ordersView);
         root.setBottom(actions);
 
-        stage.setScene(new Scene(root, 450, 600));
+        Scene scene = new Scene(root, 450, 600);
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
+        stage.setScene(scene);
         stage.show();
 
         orderManager.addObserver(this);
