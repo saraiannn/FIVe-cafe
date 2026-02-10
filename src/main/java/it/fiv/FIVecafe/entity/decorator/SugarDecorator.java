@@ -1,4 +1,6 @@
-package it.fiv.FIVecafe.entity;
+package it.fiv.FIVecafe.entity.decorator;
+
+import it.fiv.FIVecafe.entity.Beverage;
 
 public class SugarDecorator extends BeverageDecorator {
     public SugarDecorator(Beverage beverage) {

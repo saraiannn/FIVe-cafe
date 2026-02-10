@@ -18,11 +18,11 @@ The project simulates a **self-service ordering totem** with a **separate order 
 
 ## Architecture
 
-The project follows the **BCE (Boundary – Control – Entity)** pattern:
+The system follows the **BCE (Boundary – Control – Entity)** architectural pattern:
 
-- **Boundary**: user interaction and GUI
-- **Control**: application logic
-- **Entity**: domain model
+- **Boundary**: JavaFX user interfaces (BarmanBoundary and CustomerBoundary)
+- **Control**: OrderManager, responsible for coordinating use cases and enforcing business rules.
+- **Entity**: Domain objects such as Order, Beverage, and BeverageType.
 
 Design Patterns used:
 - Factory
@@ -49,7 +49,7 @@ java -version
 ## How to run the project
 ### 1. Clone the repository
 ```git
-git clone https://github.com/<username>/FIVe-cafe.git
+git clone https://github.com/saraiannn/FIVe-cafe.git
 cd FIVe-cafe
 ```
 
@@ -74,8 +74,10 @@ This command will download JavaFX dependencies, configure the JavaFX runtime and
 - Always run the app using mvn javafx:run
 ### Error: ClassNotFoundException: MainFX
 - Ensure the package name of MainFX matches the one defined in pom.xml
+
 ```xml
-<mainClass>it.fiv.FIVecafe.boundary.MainFX</mainClass>
+
+<mainClass>it.fiv.FIVecafe.boundary.CustomerBoundaryit.fiv.FIVecafe.boundary.CustomerBoundary</mainClass>
 ```
 
 ---

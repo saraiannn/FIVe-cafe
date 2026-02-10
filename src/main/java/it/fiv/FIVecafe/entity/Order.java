@@ -24,16 +24,12 @@ public class Order {
         return orderNumber;
     }
 
-    public List<Beverage> getBeverages() {
+    /*public List<Beverage> getBeverages() {
         return beverages;
-    }
+    }*/
 
     public OrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
     }
 
     public double getTotalPrice() {
@@ -44,16 +40,23 @@ public class Order {
         return totalPrice;
     }
 
-    public String getSummary() {
-        StringBuilder stringBuilder = new StringBuilder();
+    public boolean canTransitionTo(OrderStatus next) {
+        if (next == null) return false;
+        OrderStatus current = this.status;
 
-        stringBuilder.append("Order #").append(orderNumber).append("\n");
-        for(Beverage beverage : beverages) {
-            stringBuilder.append(beverage.getBeverageName()).append(" ").append(String.format("%.2f €", beverage.getBeveragePrice())).append("\n");
-        }
+        if (current == next) return false;
 
-        stringBuilder.append("Total: ").append(String.format("%.2f €", getTotalPrice())).append("\n");
-        return stringBuilder.toString();
+        return (current == OrderStatus.CREATED   && next == OrderStatus.RECEIVED) ||
+                (current == OrderStatus.RECEIVED  && next == OrderStatus.PREPARING) ||
+                (current == OrderStatus.PREPARING && next == OrderStatus.READY);
     }
+
+    public boolean transitionTo(OrderStatus next) {
+        if (!canTransitionTo(next)) return false;
+        this.status = next;
+        return true;
+    }
+
+
 }
 

@@ -1,10 +1,9 @@
 package it.fiv.FIVecafe.boundary;
 
-import it.fiv.FIVecafe.control.OrderManager;
-import it.fiv.FIVecafe.control.BeverageFactory;
-
+import it.fiv.FIVecafe.control.OrderController;
+import it.fiv.FIVecafe.entity.Extra;
 import it.fiv.FIVecafe.entity.Order;
-import it.fiv.FIVecafe.entity.Beverage;
+import it.fiv.FIVecafe.entity.BeverageType;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,17 +22,14 @@ import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import it.fiv.FIVecafe.entity.MilkDecorator;
-import it.fiv.FIVecafe.entity.SugarDecorator;
-import it.fiv.FIVecafe.entity.CaramelDecorator;
-import it.fiv.FIVecafe.entity.CocoaDecorator;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.EnumSet;
+import java.util.Set;
 
-public class MainFX extends Application {  //GUI entry point
+public class CustomerBoundary extends Application {  //GUI entry point
 
-    private OrderManager orderManager = new OrderManager();
+    private OrderController orderController = new OrderController();
     private Order currentOrder;
 
     private Button sendToBarmanBtn;
@@ -56,10 +52,10 @@ public class MainFX extends Application {  //GUI entry point
         stage.show();
 
         // opens BarmanDisplay window when the program starts
-        new BarmanDisplayFX(orderManager).show();
+        new BarmanBoundary(orderController).show();
 
         startOrderBtn.setOnAction(e -> {
-            currentOrder = orderManager.startNewOrder();
+            currentOrder = orderController.startNewOrder();
             Scene orderScene = createOrderScene(stage);
             stage.setScene(orderScene);
         });
@@ -109,7 +105,7 @@ public class MainFX extends Application {  //GUI entry point
         sendToBarmanBtn.setOnAction(e -> {
             if (currentOrder == null) return;
 
-            orderManager.submitOrder(currentOrder);
+            orderController.submitOrder(currentOrder);
 
             themedAlert(Alert.AlertType.INFORMATION, "Order sent! Status: " + currentOrder.getStatus()).showAndWait();
 
@@ -198,7 +194,6 @@ public class MainFX extends Application {  //GUI entry point
                 addToCartBtn.setDisable(true);
                 cancelBtn.setDisable(true);
 
-
                 extrasBox.setDisable(true);
                 milkCb.setSelected(false);
                 sugarCb.setSelected(false);
@@ -213,34 +208,35 @@ public class MainFX extends Application {  //GUI entry point
             addToCartBtn.setDisable(false);
             cancelBtn.setDisable(false);
 
-            extrasBox.setDisable(false);
-            milkCb.setSelected(false);
-            sugarCb.setSelected(false);
-            caramelCb.setSelected(false);
-            cocoaCb.setSelected(false);
+            BeverageType type = BeverageType.fromDisplayName(selected);
+            boolean allowsExtras = type.allowsExtras();
 
+            extrasBox.setDisable(!allowsExtras);
+            if(!allowsExtras) {
+                milkCb.setSelected(false);
+                sugarCb.setSelected(false);
+                caramelCb.setSelected(false);
+                cocoaCb.setSelected(false);
+            }
 
-            boolean isRefreshers = "Refreshers".equals(currentCategory[0]);
-            extrasBox.setDisable(isRefreshers);
         });
 
         addToCartBtn.setOnAction(e -> {
             String selected = beverageList.getSelectionModel().getSelectedItem();
-            if (selected == null) return;
+            if (selected == null || currentOrder == null) return;
 
-            int choice = mapBeverageToSelection(selected);
+            Set<Extra> extras = collectExtras(milkCb, sugarCb, caramelCb, cocoaCb);
 
-            Beverage beverage = BeverageFactory.createBeverage(choice);
+            // ✅ BCE: la GUI chiede al CONTROL di fare il lavoro
+            orderController.addBeverageToOrder(currentOrder, selected, extras);
 
-            // decorators
-            beverage = applyExtras(beverage, milkCb.isSelected(), sugarCb.isSelected(), caramelCb.isSelected(), cocoaCb.isSelected());
-
-            currentOrder.addBeverage(beverage);
-
-            // enables "Send to barman" if order is not null
+            // abilita "Send" se c'è almeno qualcosa nel carrello
             sendToBarmanBtn.setDisable(currentOrder.getTotalPrice() <= 0);
 
-            themedAlert(Alert.AlertType.INFORMATION, beverage.getBeverageName() + "\nItem: " + String.format("%.2f €", beverage.getBeveragePrice()) + "\nOrder total: " + String.format("%.2f €", currentOrder.getTotalPrice())).showAndWait();
+            themedAlert(
+                    Alert.AlertType.INFORMATION,
+                    selected + " added!\nOrder total: " + String.format("%.2f €", currentOrder.getTotalPrice())
+            ).showAndWait();
 
         });
 
@@ -263,45 +259,6 @@ public class MainFX extends Application {  //GUI entry point
 
     }
 
-    private Beverage applyExtras(Beverage base, boolean milk, boolean sugar, boolean caramel, boolean cocoa) {
-        Beverage result = base;
-
-        if (milk) result = new MilkDecorator(result);
-        if (sugar) result = new SugarDecorator(result);
-        if (caramel) result = new CaramelDecorator(result);
-        if (cocoa) result = new CocoaDecorator(result);
-
-        return result;
-    }
-
-
-    private void showBeverages(VBox beverageBox, String[] beverages) {
-
-        beverageBox.getChildren().clear();
-
-        for (String bev : beverages) {
-            Button btn = new Button(bev);
-            btn.setPrefWidth(200);
-
-            btn.setOnAction(e -> {
-                int selection = mapBeverageToSelection(bev);
-                Beverage beverage = BeverageFactory.createBeverage(selection);
-                currentOrder.addBeverage(beverage);
-
-                sendToBarmanBtn.setDisable(currentOrder.getTotalPrice() <= 0);
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText(
-                        bev + " added!\nTOTAL: " +
-                                String.format("%.2f €", currentOrder.getTotalPrice())
-                );
-                alert.showAndWait();
-            });
-
-            beverageBox.getChildren().add(btn);
-        }
-    }
 
     private String getDescription(String bev) {
         switch (bev) {
@@ -402,65 +359,6 @@ public class MainFX extends Application {  //GUI entry point
     }
 
 
-    private int mapBeverageToSelection(String bev) {
-        switch (bev) {
-
-            // basic coffee
-            case "Espresso": return 1;
-            case "Americano": return 2;
-            case "Cappuccino": return 3;
-            case "Macchiato": return 4;
-            case "Flat White": return 12;
-            case "Latte": return 13;
-            case "Double Espresso": return 14;
-
-            // cold coffee
-            case "Iced Latte": return 5;
-            case "Cold Brew": return 6;
-            case "Iced Americano": return 7;
-            case "Iced Mocha": return 8;
-            case "Iced Cappuccino": return 15;
-            case "Espresso Tonic": return 16;
-            case "Iced Chocolate Latte": return 17;
-
-            // tea & non coffee
-            case "Green Tea": return 9;
-            case "Hot Chocolate": return 10;
-            case "Black Tea": return 11;
-            case "Chai Latte": return 18;
-            case "Herbal Tea": return 19;
-            case "Matcha Latte": return 20;
-            case "Golden Milk": return 21;
-
-            // sweet drinks
-            case "Vanilla Latte": return 22;
-            case "Caramel Latte": return 23;
-            case "Hazelnut Latte": return 24;
-            case "Mocha": return 25;
-            case "White Mocha": return 26;
-            case "Cinnamon Latte": return 27;
-
-            // refreshers
-            case "Lemonade": return 28;
-            case "Sparkling Lemonade": return 29;
-            case "Peach Iced Tea": return 30;
-            case "Lemon Iced Tea": return 31;
-            case "Orange Juice": return 32;
-            case "Sparkling Water": return 33;
-            case "Still Water": return 34;
-
-            // seasonal specials
-            case "Pumpkin Spice Latte": return 35;
-            case "Gingerbread Latte": return 36;
-            case "Peppermint Mocha": return 37;
-            case "Salted Caramel Mocha": return 38;
-            case "Affogato": return 39;
-
-            default:
-                throw new IllegalArgumentException("Invalid beverage: " + bev);
-        }
-    }
-
     private Alert themedAlert(Alert.AlertType type, String text) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
@@ -470,6 +368,16 @@ public class MainFX extends Application {  //GUI entry point
 
         return alert;
     }
+
+    private Set<Extra> collectExtras(CheckBox milkCb, CheckBox sugarCb, CheckBox caramelCb, CheckBox cocoaCb) {
+        Set<Extra> extras = EnumSet.noneOf(Extra.class);
+        if (milkCb.isSelected()) extras.add(Extra.MILK);
+        if (sugarCb.isSelected()) extras.add(Extra.SUGAR);
+        if (caramelCb.isSelected()) extras.add(Extra.CARAMEL);
+        if (cocoaCb.isSelected()) extras.add(Extra.COCOA);
+        return extras;
+    }
+
 
 }
 

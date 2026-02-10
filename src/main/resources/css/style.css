@@ -89,7 +89,7 @@
     -fx-text-fill: #FFFFFF;
 }
 
-/* list view (totem + barman display) */
+/* list view */
 .list-view {
     -fx-background-color: transparent;
     -fx-control-inner-background: transparent;
@@ -98,23 +98,31 @@
 
 .list-cell {
     -fx-background-color: transparent;
-    -fx-padding: 6 0;
     -fx-text-fill: #E6E6E6;
+    -fx-padding: 14 16;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
 }
 
-/* card-like cells */
-.cell-box {
-    -fx-background-color: #151824;
-    -fx-background-radius: 14;
-    -fx-border-radius: 14;
-    -fx-border-color: #232834;
-    -fx-border-width: 1;
-    -fx-padding: 12 14;
+/* hover */
+.list-cell:hover {
+    -fx-background-color: #1A1D24;
 }
 
-.list-cell:selected .cell-box {
+
+/* selected */
+.list-cell:selected {
+    -fx-background-color: #2A2F3A;
+    -fx-text-fill: #FFFFFF;
     -fx-border-color: #5A5F6B;
     -fx-border-width: 2;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+/* avoids default blue in focus */
+.list-view:focused .list-cell:selected {
+    -fx-background-color: #2A2F3A;
 }
 
 /* checkboxes */
@@ -174,3 +182,14 @@
 .scroll-bar .thumb:hover {
     -fx-background-color: #2F3647;
 }
+
+/* keeps section visible without focus */
+.list-cell:selected,
+.list-view:focused .list-cell:selected,
+.list-view .list-cell:selected {
+    -fx-background-color: #2A2F3A;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: #5A5F6B;
+    -fx-border-width: 2;
+}
+

@@ -1,6 +1,6 @@
 package it.fiv.FIVecafe.boundary;
 
-import it.fiv.FIVecafe.control.OrderManager;
+import it.fiv.FIVecafe.control.OrderController;
 import it.fiv.FIVecafe.entity.Order;
 import it.fiv.FIVecafe.entity.OrderStatus;
 import it.fiv.FIVecafe.observer.OrderObserver;
@@ -14,22 +14,22 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-public class BarmanDisplayFX implements OrderObserver {
+public class BarmanBoundary implements OrderObserver {
 
-    private final OrderManager orderManager;
+    private final OrderController orderController;
 
     private final ObservableList<Order> orderItems = FXCollections.observableArrayList();
     private ListView<Order> ordersView;
 
-    public BarmanDisplayFX(OrderManager orderManager) {
-        this.orderManager = orderManager;
+    public BarmanBoundary(OrderController orderController) {
+        this.orderController = orderController;
     }
 
     public void show() {
         Stage stage = new Stage();
-        stage.setTitle("FIVe Cafè's Order Display");
+        stage.setTitle("Barman's Order Display");
 
-        orderItems.setAll(orderManager.getOrders());
+        orderItems.setAll(orderController.getOrders());
 
         ordersView = new ListView<>(orderItems);
         ordersView.setCellFactory(lv -> new ListCell<>() {
@@ -69,14 +69,14 @@ public class BarmanDisplayFX implements OrderObserver {
         stage.setScene(scene);
         stage.show();
 
-        orderManager.addObserver(this);
+        orderController.addObserver(this);
     }
 
     private void changeStatus(OrderStatus status) {
         Order selected = ordersView.getSelectionModel().getSelectedItem();
         if (selected == null) return;
 
-        orderManager.updateOrderStatus(selected, status);
+        orderController.updateOrderStatus(selected, status);
     }
 
 
