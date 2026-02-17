@@ -48,7 +48,8 @@ public class Order {
 
         return (current == OrderStatus.CREATED   && next == OrderStatus.RECEIVED) ||
                 (current == OrderStatus.RECEIVED  && next == OrderStatus.PREPARING) ||
-                (current == OrderStatus.PREPARING && next == OrderStatus.READY);
+                (current == OrderStatus.PREPARING && next == OrderStatus.READY) ||
+                (current == OrderStatus.READY     && next == OrderStatus.DELIVERED);
     }
 
     public boolean transitionTo(OrderStatus next) {

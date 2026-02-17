@@ -8,6 +8,7 @@ import it.fiv.FIVecafe.entity.BeverageType;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -26,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.Optional;
 
 public class CustomerBoundary extends Application {  //GUI entry point
 
@@ -98,18 +100,42 @@ public class CustomerBoundary extends Application {  //GUI entry point
         caramelCb.setSelected(false);
         cocoaCb.setSelected(false);
 
-        sendToBarmanBtn = new Button("Send");
+        sendToBarmanBtn = new Button("Pay");
         sendToBarmanBtn.setDisable(true);
         sendToBarmanBtn.getStyleClass().add("primary-btn"); // css
 
         sendToBarmanBtn.setOnAction(e -> {
+
             if (currentOrder == null) return;
+
+            if (currentOrder.getTotalPrice() <= 0) {
+                themedAlert(Alert.AlertType.WARNING,
+                        "Your cart is empty. Add at least one item.")
+                        .showAndWait();
+                return;
+            }
+
+            boolean paid = showPaymentDialog(currentOrder.getTotalPrice());
+
+            if (!paid) {
+                themedAlert(Alert.AlertType.INFORMATION,
+                        "Payment cancelled.")
+                        .showAndWait();
+                return;
+            }
 
             orderController.submitOrder(currentOrder);
 
-            themedAlert(Alert.AlertType.INFORMATION, "Order sent! Status: " + currentOrder.getStatus()).showAndWait();
+            themedAlert(Alert.AlertType.INFORMATION,
+                    "Payment successful!\n" +
+                            "Order ID: #" + currentOrder.getOrderNumber() +
+                            "\nStatus: " + currentOrder.getStatus())
+                    .showAndWait();
 
+            sendToBarmanBtn.setDisable(true);
         });
+
+
 
         Button addToCartBtn = new Button("Add to cart");
         Button cancelBtn = new Button("Cancel");
@@ -174,6 +200,7 @@ public class CustomerBoundary extends Application {  //GUI entry point
                 detailsBox.setManaged(true);
 
                 beverageList.getSelectionModel().clearSelection();
+                resetExtras(milkCb, sugarCb, caramelCb, cocoaCb);
                 bevName.setText("Select a beverage");
                 bevDesc.setText("");
                 addToCartBtn.setDisable(true);
@@ -202,6 +229,7 @@ public class CustomerBoundary extends Application {  //GUI entry point
 
                 return;
             }
+            resetExtras(milkCb, sugarCb, caramelCb, cocoaCb);
 
             bevName.setText(selected);
             bevDesc.setText(getDescription(selected));
@@ -235,6 +263,13 @@ public class CustomerBoundary extends Application {  //GUI entry point
                     Alert.AlertType.INFORMATION,
                     selected + " added!\nOrder total: " + String.format("%.2f €", currentOrder.getTotalPrice())
             ).showAndWait();
+
+            resetExtras(milkCb, sugarCb, caramelCb, cocoaCb);
+            beverageList.getSelectionModel().clearSelection();
+            extrasBox.setDisable(true);
+            addToCartBtn.setDisable(true);
+            cancelBtn.setDisable(true);
+
 
         });
 
@@ -367,6 +402,21 @@ public class CustomerBoundary extends Application {  //GUI entry point
         return alert;
     }
 
+    private boolean showPaymentDialog(double total) {
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("Card", "Card", "Cash");
+
+        dialog.setTitle("Payment");
+        dialog.setHeaderText("Total: " + String.format("%.2f €", total));
+        dialog.setContentText("Select payment method:");
+
+        dialog.getDialogPane().getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
+        Optional<String> result = dialog.showAndWait();
+
+        return result.isPresent();
+    }
+
     private Set<Extra> collectExtras(CheckBox milkCb, CheckBox sugarCb, CheckBox caramelCb, CheckBox cocoaCb) {
         Set<Extra> extras = EnumSet.noneOf(Extra.class);
         if (milkCb.isSelected()) extras.add(Extra.MILK);
@@ -375,6 +425,14 @@ public class CustomerBoundary extends Application {  //GUI entry point
         if (cocoaCb.isSelected()) extras.add(Extra.COCOA);
         return extras;
     }
+
+    private void resetExtras(CheckBox milkCb, CheckBox sugarCb, CheckBox caramelCb, CheckBox cocoaCb) {
+        milkCb.setSelected(false);
+        sugarCb.setSelected(false);
+        caramelCb.setSelected(false);
+        cocoaCb.setSelected(false);
+    }
+
 
 
 }

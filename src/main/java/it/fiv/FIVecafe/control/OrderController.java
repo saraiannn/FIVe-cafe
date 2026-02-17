@@ -41,10 +41,8 @@ public class OrderController {  //subject
         if (order == null || next == null) return;
 
         if (!order.transitionTo(next)) {
-            return;
+            notifyObservers(order);
         }
-
-        notifyObservers(order);
     }
 
 
@@ -54,7 +52,11 @@ public class OrderController {  //subject
     }
 
     public void submitOrder(Order order) {
-        updateOrderStatus(order, OrderStatus.RECEIVED);
+        if (order == null) return;
+
+        if (order.transitionTo(OrderStatus.RECEIVED)) {
+            notifyObservers(order);
+        }
     }
 
 
@@ -89,7 +91,6 @@ public class OrderController {  //subject
         }
 
         order.addBeverage(beverage);
-
 
         notifyObservers(order);
     }
