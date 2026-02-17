@@ -227,10 +227,8 @@ public class CustomerBoundary extends Application {  //GUI entry point
 
             Set<Extra> extras = collectExtras(milkCb, sugarCb, caramelCb, cocoaCb);
 
-            // ✅ BCE: la GUI chiede al CONTROL di fare il lavoro
             orderController.addBeverageToOrder(currentOrder, selected, extras);
 
-            // abilita "Send" se c'è almeno qualcosa nel carrello
             sendToBarmanBtn.setDisable(currentOrder.getTotalPrice() <= 0);
 
             themedAlert(
