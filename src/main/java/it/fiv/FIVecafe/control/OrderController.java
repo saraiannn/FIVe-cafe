@@ -64,7 +64,7 @@ public class OrderController {  //subject
         BeverageType type = BeverageType.fromDisplayName(beverageName);
 
         if (!type.allowsExtras()) {
-            extras = Set.of(); // ignora extra se non permessi
+            extras = Set.of();
         }
 
         Beverage beverage = BeverageFactory.createBeverage(type);
@@ -72,7 +72,7 @@ public class OrderController {  //subject
 
         if (beverage == null) return;
 
-        // applica decorator
+
         if (extras != null) {
             if (extras.contains(Extra.MILK)) {
                 beverage = new MilkDecorator(beverage);
@@ -90,7 +90,7 @@ public class OrderController {  //subject
 
         order.addBeverage(beverage);
 
-        // notifica display
+
         notifyObservers(order);
     }
 }
